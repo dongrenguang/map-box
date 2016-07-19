@@ -1,0 +1,5 @@
+{
+    "presets": ["ui5"],
+    "plugins": ["transform-runtime"],
+    "sourceRoot": "./src",
+}
