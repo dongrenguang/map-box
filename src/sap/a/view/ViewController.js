@@ -1,6 +1,6 @@
 import ManagedObject from "sap/ui/base/ManagedObject";
 
-import View from ".View";
+import View from "./View";
 
 export default class ViewController extends ManagedObject
 {
@@ -17,7 +17,7 @@ export default class ViewController extends ManagedObject
     }
 
     init()
-    {
+	{
 
     }
 
@@ -34,14 +34,16 @@ export default class ViewController extends ManagedObject
         }
     }
 
+
     getView()
     {
         return this.view;
     }
 
+
     createView(options)
     {
-        throw new Error("createView(option) must be overrided in the derived class.");
+        throw new Error("createView(options) must be override in the derived class.");
     }
 
     initView()
