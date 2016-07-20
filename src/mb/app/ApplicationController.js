@@ -11,7 +11,6 @@ export default class ApplicationController extends AdaptiveApplicationController
 
     run()
     {
-        super.run();
-        console.log("The application is running.");
+
     }
 }
