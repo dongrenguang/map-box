@@ -1,7 +1,9 @@
 import AdaptiveMapView from "sap/a/map/MapView";
 import TileLayer from "sap/a/map/layer/TileLayer";
 
-import ExampleLayer from "./layer/ExampleLayer";
+import ServiceClient from "gaode/service/ServiceClient";
+
+import NaviLayer from "./layer/NaviLayer";
 
 export default class MapView extends AdaptiveMapView
 {
@@ -18,11 +20,21 @@ export default class MapView extends AdaptiveMapView
         });
         this.addLayer(this.tileLayer);
 
-        this.exampleLayer = new ExampleLayer({
-            startLocation: [32.04389, 118.77881],
-            endLocation: [31.9790247, 118.7548084]
+        this.naviLayer = new NaviLayer();
+        this.addLayer(this.naviLayer);
+    }
+
+    searchRoute(startLocation, endLocation)
+    {
+        this.naviLayer.applySettings({
+            startLocation,
+            endLocation
         });
-        this.addLayer(this.exampleLayer);
-        this.exampleLayer.drawRoute();
+
+        this.naviLayer.fitBounds();
+
+        ServiceClient.getInstance().searchDrivingRoutes([startLocation, endLocation]).then(routes => {
+            this.naviLayer.drawRoute(routes);
+        });
     }
 }

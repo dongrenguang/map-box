@@ -1,6 +1,6 @@
 import Layer from "sap/a/map/layer/Layer";
 
-export default class ExampleLayer extends Layer
+export default class NaviLayer extends Layer
 {
     metadata = {
         properties: {
@@ -13,8 +13,8 @@ export default class ExampleLayer extends Layer
     {
         super.init();
         this.markerGroup = L.featureGroup();
-        this.routeGroup = L.featureGroup();
         this.container.addLayer(this.markerGroup);
+        this.routeGroup = L.featureGroup();
         this.container.addLayer(this.routeGroup);
     }
 
@@ -32,11 +32,11 @@ export default class ExampleLayer extends Layer
         this._updateEndMarker();
     }
 
-    drawRoute()
+    drawRoute(routes)
     {
         this.routeGroup.clearLayers();
-        const line = L.polyline([this.getStartLocation(), this.getEndLocation()])
-        this.routeGroup.addLayer(line);
+        const multiPolyline = L.multiPolyline(routes);
+        this.routeGroup.addLayer(multiPolyline);
     }
 
     _updateStartMarker()
