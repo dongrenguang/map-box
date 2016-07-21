@@ -7,7 +7,7 @@ export default class MapView extends View
 		properties: {
 			defaultCenterLocation: {
 				type: "object",
-                defaultValue: [ 32.04389, 118.77881 ]
+                defaultValue: [32.04389, 118.77881]
 			},
 			defaultZoom: {
 				type: "int",
@@ -36,21 +36,15 @@ export default class MapView extends View
         }
     };
 
-    init()
+    afterInit()
     {
-        super.init();
+        super.afterInit();
         this.addStyleClass("sap-a-map-view");
-
         this.attachAddedToParent(() => {
 			setTimeout(() => {
 				this.invalidateSize();
 			});
 		});
-    }
-
-    afterInit()
-    {
-        super.afterInit();
         this._initMap();
         this.initLayers();
     }
