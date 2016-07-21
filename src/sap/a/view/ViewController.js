@@ -6,7 +6,7 @@ export default class ViewController extends ManagedObject
 {
     metadata = {
         properties: {
-            viewOptions: { type: "object", defaultValue: {} }
+            viewOptions: { type: "object" }
         }
     };
 
@@ -34,12 +34,10 @@ export default class ViewController extends ManagedObject
         }
     }
 
-
     getView()
     {
         return this.view;
     }
-
 
     createView(options)
     {

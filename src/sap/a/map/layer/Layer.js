@@ -18,14 +18,10 @@ export default class Layer extends ManagedObject
 
     }
 
-
-
     isVisible()
     {
         return this.getParent() !== null && this.getParent().map.hasLayer(this.container);
     }
-
-
 
     removeFromParent()
     {
