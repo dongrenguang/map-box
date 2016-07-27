@@ -45,7 +45,7 @@ export default class NaviLayer extends Layer
         {
             this.startMarker = L.circleMarker(this.getStartLocation());
             this.startMarker.setStyle({
-                color: "green",
+                color: "red",
                 opacity: 0.8,
                 fill: "green",
                 fillOpacity: 0.8
