@@ -7,8 +7,12 @@ import SelectionPoiLayer from "./layer/SelectionPoiLayer";
 export default class MapView extends AdaptiveMapView
 {
     metadata = {
+        properties: {
+            selectedPoi: { type: "object", bindable: true },
+            tipPoi: { type: "object", bindable: true }
+        },
         events: {
-            click: {}
+            click: { parameters: { location: "object" } }
         }
     };
 
@@ -31,6 +35,26 @@ export default class MapView extends AdaptiveMapView
 
         this.selectionPoiLayer = new SelectionPoiLayer();
         this.addLayer(this.selectionPoiLayer);
+    }
+
+    setSelectedPoi(selectedPoi)
+    {
+        this.setProperty("selectedPoi", selectedPoi);
+        if (selectedPoi)
+        {
+            this.updateSelectedPoiMarker();
+            this.setCenterLocation(selectedPoi.location, 16);
+        }
+    }
+
+    setTipPoi(tipPoi)
+    {
+        this.setProperty("tipPoi", tipPoi);
+    }
+
+    updateSelectedPoiMarker()
+    {
+        this.selectionPoiLayer.updateSelectedPoiMarker(this.getSelectedPoi().location);
     }
 
 

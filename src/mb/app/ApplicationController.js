@@ -7,15 +7,10 @@ import PoiSearchViewController from "../view/PoiSearchViewController";
 
 export default class ApplicationController extends AdaptiveApplicationController
 {
-    init()
-    {
-        super.init();
-        this._initModel();
-    }
-
     afterInit()
     {
         super.afterInit();
+        this._initModel();
         this._initMapViewController();
         this._initPoiSearchViewController();
     }
@@ -24,12 +19,7 @@ export default class ApplicationController extends AdaptiveApplicationController
     {
         const model = new Model();
         sap.ui.getCore().setModel(model);
-
-        const bindingSelectedPoi = model.bindProperty("/selectedPoi");
-        bindingSelectedPoi.attachChange(this._onSelectedPoiChanged.bind(this));
-
-        const bindingQueryPoi = model.bindProperty("/queryPoi");
-        bindingQueryPoi.attachChange(this._onQueryPoiChanged.bind(this));
+        this.setModel(model);
     }
 
     _initMapViewController()
@@ -58,28 +48,5 @@ export default class ApplicationController extends AdaptiveApplicationController
     run()
     {
 
-    }
-
-
-
-
-    _onSelectedPoiChanged()
-    {
-        const selectedPoi = sap.ui.getCore().getModel().getProperty("/selectedPoi");
-        if (selectedPoi && selectedPoi.location)
-        {
-            this.mapView.setCenterLocation(selectedPoi.location);
-            this.mapViewController.updateSelectedPoiMarker(selectedPoi.location);
-            this.mapView.setZoom(13);
-        }
-    }
-
-    _onQueryPoiChanged()
-    {
-        const queryPoi  = sap.ui.getCore().getModel().getProperty("/queryPoi");
-        if (queryPoi)
-        {
-            this.poiSearchView.setQueryPoi(queryPoi);
-        }
     }
 }

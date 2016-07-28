@@ -13,20 +13,23 @@ export default class MapViewController extends ViewController
 
     createView(options)
     {
-        return new MapView("map-view", options);
+        const opt = $.extend({
+            selectedPoi: "{/selectedPoi}",
+            tipPoi: "{/tipPoi}"
+        }, options);
+        return new MapView("map-view", opt);
     }
 
     initView()
     {
         super.initView();
         this.view.attachClick(this._mapView_onclick.bind(this));
-
-        this.tileLayer = this.view.tileLayer;
-        this.selectionPoiLayer = this.view.selectionPoiLayer;
+        this.naviLayer = this.view.naviLayer; // TODO delete
     }
 
     searchRoute(startLocation, endLocation)
     {
+        // TODO
         this.naviLayer.applySettings({
             startLocation,
             endLocation
@@ -39,20 +42,15 @@ export default class MapViewController extends ViewController
         });
     }
 
-    updateSelectedPoiMarker(location)
-    {
-        this.selectionPoiLayer.updateSelectedPoiMarker(location);
-    }
-
 
 
 
     _mapView_onclick(e)
     {
-        const location = e.getParameter("location");
+        const location = L.latLng(e.getParameter("location"));
         ServiceClient.getInstance().searchGeocoder(location).then(result => {
             const name = result.formattedAddress;
-            sap.ui.getCore().getModel().setProperty("/queryPoi", { name, location });
+            this.getModel().setProperty("/tipPoi", { name, location });
         }, error => console.error(error));
     }
 }

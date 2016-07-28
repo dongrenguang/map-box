@@ -2,13 +2,6 @@ import Layer from "sap/a/map/layer/Layer";
 
 export default class SelectionPoiLayer extends Layer
 {
-    metadata = {
-        properties: {
-            startLocation: { type: "any" },
-            endLocation: { type: "any" }
-        }
-    };
-
     init()
     {
         super.init();
