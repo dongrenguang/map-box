@@ -1,16 +1,18 @@
 import AdaptiveMapView from "sap/a/map/MapView";
 import TileLayer from "sap/a/map/layer/TileLayer";
 
-import ServiceClient from "gaode/service/ServiceClient";
-
 import NaviLayer from "./layer/NaviLayer";
 import SelectionPoiLayer from "./layer/SelectionPoiLayer";
 
 export default class MapView extends AdaptiveMapView
 {
     metadata = {
+        properties: {
+            selectedPoi: { type: "object", bindable: true },
+            tipPoi: { type: "object", bindable: true }
+        },
         events: {
-            click: {}
+            click: { parameters: { location: "object" } }
         }
     };
 
@@ -35,23 +37,24 @@ export default class MapView extends AdaptiveMapView
         this.addLayer(this.selectionPoiLayer);
     }
 
-    searchRoute(startLocation, endLocation)
+    setSelectedPoi(selectedPoi)
     {
-        this.naviLayer.applySettings({
-            startLocation,
-            endLocation
-        });
-
-        this.naviLayer.fitBounds();
-
-        ServiceClient.getInstance().searchDrivingRoutes([startLocation, endLocation]).then(routes => {
-            this.naviLayer.drawRoute(routes);
-        });
+        this.setProperty("selectedPoi", selectedPoi);
+        if (selectedPoi)
+        {
+            this.updateSelectedPoiMarker();
+            this.setCenterLocation(selectedPoi.location, 16);
+        }
     }
 
-    updateSelectedPoiMarker(location)
+    setTipPoi(tipPoi)
     {
-        this.selectionPoiLayer.updateSelectedPoiMarker(location);
+        this.setProperty("tipPoi", tipPoi);
+    }
+
+    updateSelectedPoiMarker()
+    {
+        this.selectionPoiLayer.updateSelectedPoiMarker(this.getSelectedPoi().location);
     }
 
 

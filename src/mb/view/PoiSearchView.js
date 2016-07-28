@@ -4,13 +4,12 @@ export default class PoiSearchView extends View
 {
     metadata = {
         properties: {
-            poi: { type: "object" },
-            poiTips: { type: "object" }, // Array
-            queryPoi: { type: "object" }
+            selectedPoi: { type: "object", bindable: true },
+            tipPoi: { type: "object", bindable: true },
         },
         events: {
             input: { parameters: { keyword: "string" } },
-            poiChanged: {}
+            search: { parameters: { keyword: "string" } }
         }
     };
 
@@ -46,22 +45,25 @@ export default class PoiSearchView extends View
         this.$searchInput.on("keydown", this._onkeydown.bind(this))
     }
 
-    setPoi(poi)
+    setSelectedPoi(selectedPoi)
     {
-        this.setProperty("poi", poi);
-        this.firePoiChanged();
-        if (poi && poi.name)
+        this.setProperty("selectedPoi", selectedPoi);
+        if (selectedPoi && selectedPoi.name)
         {
-            this.$searchInput.val(poi.name);
+            this.$searchInput.val(selectedPoi.name);
+        }
+        else
+        {
+            this.$searchInput.val("");
         }
     }
 
-    setQueryPoi(queryPoi)
+    setTipPoi(tipPoi)
     {
-        this.setProperty("queryPoi", queryPoi);
-        if (queryPoi && queryPoi.name)
+        this.setProperty("tipPoi", tipPoi);
+        if (tipPoi && tipPoi.name)
         {
-            this.$searchInput.val(queryPoi.name);
+            this.$searchInput.val(tipPoi.name);
         }
     }
 
@@ -70,11 +72,15 @@ export default class PoiSearchView extends View
 
     _onkeydown(e)
     {
-        const poiTips = this.getPoiTips();
-        if (e.keyCode === 13 && poiTips && poiTips.length > 0)
+        if (e.keyCode === 13)
         {
-            const firstTip = poiTips[0];
-            this.setPoi({ name: firstTip.name, location: firstTip.location });
+            // Enter key
+            this._onsearch(this.$searchInput.val());
         }
+    }
+
+    _onsearch(keyword)
+    {
+        this.fireSearch({ keyword });
     }
 }

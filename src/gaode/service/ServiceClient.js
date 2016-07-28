@@ -103,26 +103,30 @@ export default class ServiceClient extends ManagedObject
     searchGeocoder(location)
     {
         return new Promise((resolve, reject) => {
-            this.geocoder.getAddress(new AMap.LngLat(location.lng, location.lat), (status, result) => {
-                if(status === "error")
-                {
-                    reject({
-                        successful: false,
-                        message: "服务请求出错啦！"
-                    });
-                }
-                else if(status === "no_data")
-                {
-                    reject({
-                        successful: false,
-                        message: "无数据返回，请换个关键字试试～～"
-                    });
-                }
-                else
-                {
-                    resolve(result.regeocode);
-                }
-            });
+            const lngLat = [location.lng, location.lat];
+            this.convertToGcj02(lngLat).then(locations => {
+                const gcj02Location = locations[0];
+                this.geocoder.getAddress(new AMap.LngLat(gcj02Location.lng, gcj02Location.lat), (status, result) => {
+                    if(status === "error")
+                    {
+                        reject({
+                            successful: false,
+                            message: "服务请求出错啦！"
+                        });
+                    }
+                    else if(status === "no_data")
+                    {
+                        reject({
+                            successful: false,
+                            message: "无数据返回，请换个关键字试试～～"
+                        });
+                    }
+                    else
+                    {
+                        resolve(result.regeocode);
+                    }
+                });
+            }, reject);
         });
     }
 
