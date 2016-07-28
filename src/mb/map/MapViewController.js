@@ -20,6 +20,28 @@ export default class MapViewController extends ViewController
     {
         super.initView();
         this.view.attachClick(this._mapView_onclick.bind(this));
+
+        this.tileLayer = this.view.tileLayer;
+        this.selectionPoiLayer = this.view.selectionPoiLayer;
+    }
+
+    searchRoute(startLocation, endLocation)
+    {
+        this.naviLayer.applySettings({
+            startLocation,
+            endLocation
+        });
+
+        this.naviLayer.fitBounds();
+
+        ServiceClient.getInstance().searchDrivingRoutes([startLocation, endLocation]).then(routes => {
+            this.naviLayer.drawRoute(routes);
+        });
+    }
+
+    updateSelectedPoiMarker(location)
+    {
+        this.selectionPoiLayer.updateSelectedPoiMarker(location);
     }
 
 

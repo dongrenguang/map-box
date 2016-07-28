@@ -1,8 +1,6 @@
 import AdaptiveMapView from "sap/a/map/MapView";
 import TileLayer from "sap/a/map/layer/TileLayer";
 
-import ServiceClient from "gaode/service/ServiceClient";
-
 import NaviLayer from "./layer/NaviLayer";
 import SelectionPoiLayer from "./layer/SelectionPoiLayer";
 
@@ -33,25 +31,6 @@ export default class MapView extends AdaptiveMapView
 
         this.selectionPoiLayer = new SelectionPoiLayer();
         this.addLayer(this.selectionPoiLayer);
-    }
-
-    searchRoute(startLocation, endLocation)
-    {
-        this.naviLayer.applySettings({
-            startLocation,
-            endLocation
-        });
-
-        this.naviLayer.fitBounds();
-
-        ServiceClient.getInstance().searchDrivingRoutes([startLocation, endLocation]).then(routes => {
-            this.naviLayer.drawRoute(routes);
-        });
-    }
-
-    updateSelectedPoiMarker(location)
-    {
-        this.selectionPoiLayer.updateSelectedPoiMarker(location);
     }
 
 
