@@ -24,6 +24,9 @@ export default class PoiSearchViewController extends ViewController
         super.initView();
         this.view.attachInput(this._poiSearchView_oninput.bind(this));
         this.view.attachSearch(this._poiSearchView_onsearch.bind(this));
+
+        this.poiSuggestionListView = this.view.poiSuggestionListView;
+        this.poiSuggestionListView.attachSelectedPoiChanged(this._poiSuggestionListView_onselectedpoichanged.bind(this));
     }
 
 
@@ -32,18 +35,32 @@ export default class PoiSearchViewController extends ViewController
     _poiSearchView_oninput(e)
     {
         const keyword = e.getParameter("keyword");
-        ServiceClient.getInstance().searchPoiAutocomplete(keyword).then(tips => {
-            // TODO
-            // this.view.setPoiTips(tips);
-        });
+        if (keyword.trim() === "")
+        {
+            this.view.setPoiSuggestions([]);
+        }
+        else
+        {
+            ServiceClient.getInstance().searchPoiAutocomplete(keyword).then(tips => {
+                this.view.setPoiSuggestions(tips);
+            });
+        }
     }
 
     _poiSearchView_onsearch(e)
     {
         const keyword = e.getParameter("keyword");
         ServiceClient.getInstance().searchPoiAutocomplete(keyword).then(tips => {
-            const topPoi = { name: tips[0].name, location: L.latLng(tips[0].location) };
+            const topPoi = { name: tips[0].name, location: tips[0].location };
+            this.getModel().setProperty("/selectedPoi", null);
             this.getModel().setProperty("/selectedPoi", topPoi);
         }, error => console.error(error));
+    }
+
+    _poiSuggestionListView_onselectedpoichanged(e)
+    {
+        const selectedPoi = e.getParameter("selectedPoi");
+        this.getModel().setProperty("/selectedPoi", null);
+        this.getModel().setProperty("/selectedPoi", selectedPoi);
     }
 }

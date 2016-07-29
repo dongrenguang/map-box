@@ -47,7 +47,7 @@ export default class MapViewController extends ViewController
 
     _mapView_onclick(e)
     {
-        const location = L.latLng(e.getParameter("location"));
+        const location = e.getParameter("location");
         ServiceClient.getInstance().searchGeocoder(location).then(result => {
             const name = result.formattedAddress;
             this.getModel().setProperty("/tipPoi", { name, location });
