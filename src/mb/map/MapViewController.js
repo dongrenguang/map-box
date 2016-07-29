@@ -50,7 +50,7 @@ export default class MapViewController extends ViewController
         const location = e.getParameter("location");
         ServiceClient.getInstance().searchGeocoder(location).then(result => {
             const name = result.formattedAddress;
-            this.getModel().setProperty("/tipPoi", { name, location });
+            this.getModel().forceSetProperty("/tipPoi", { name, location });
         }, error => console.error(error));
     }
 }

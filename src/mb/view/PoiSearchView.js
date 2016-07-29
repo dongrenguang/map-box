@@ -58,6 +58,7 @@ export default class PoiSearchView extends View
     setSelectedPoi(selectedPoi)
     {
         this.setProperty("selectedPoi", selectedPoi);
+        this.setPoiSuggestions([]);
         if (selectedPoi && selectedPoi.name)
         {
             this.$searchInput.val(selectedPoi.name);

@@ -52,15 +52,13 @@ export default class PoiSearchViewController extends ViewController
         const keyword = e.getParameter("keyword");
         ServiceClient.getInstance().searchPoiAutocomplete(keyword).then(tips => {
             const topPoi = { name: tips[0].name, location: tips[0].location };
-            this.getModel().setProperty("/selectedPoi", null);
-            this.getModel().setProperty("/selectedPoi", topPoi);
+            this.getModel().forceSetProperty("/selectedPoi", topPoi);
         }, error => console.error(error));
     }
 
     _poiSuggestionListView_onselectedpoichanged(e)
     {
         const selectedPoi = e.getParameter("selectedPoi");
-        this.getModel().setProperty("/selectedPoi", null);
-        this.getModel().setProperty("/selectedPoi", selectedPoi);
+        this.getModel().forceSetProperty("/selectedPoi", selectedPoi);
     }
 }
