@@ -1,0 +1,94 @@
+.mb-od-search-view
+{
+    position: absolute;
+    top: 20px;
+    left: 50px;
+    height: 160px;
+    width: 360px;
+    display: flex;
+    flex-direction: column;;
+    background: rgba(252, 252, 252, 1);
+    box-shadow: 1px 2px 1px 2px rgba(0, 0, 0, 0.2);
+    border-radius: 2px;
+
+    > .line-search
+    {
+        flex: 5;
+        align-self: stretch;
+        display: flex;
+        flex-direction: row;
+
+        > .search-views
+        {
+            flex: 8;
+            align-self: stretch;
+            display: flex;
+            flex-direction: column;
+            padding-top: 8px;
+            padding-bottom: 8px;
+
+            > .mb-poi-search-view
+            {
+                flex: 1;
+                margin-left: 12px;
+            }
+
+            #originPoiSearchViewController
+            {
+                z-index: 1;
+
+                > input[type=search]
+                {
+                    &::before
+                    {
+                        content: "起：";
+                    }
+                }
+            }
+
+            #destinationPoiSearchViewController
+            {
+                > input[type=search]
+                {
+                    &::before
+                    {
+                        content: "终：";
+                    }
+                }
+            }
+        }
+
+        > .switch-button
+        {
+            flex: 1;
+            align-self: center;
+            text-align: center;
+            cursor: pointer;
+        }
+    }
+
+    > .search-button-wrapper
+    {
+        flex: 3;
+        align-self: stretch;
+        display: flex;
+        justify-content: flex-end;
+
+        > .search-button
+        {
+            align-self: center;
+            width: 84px;
+            height: 70%;
+            margin-right: 10px;
+            border-radius: 4px;
+            color: white;
+            background: rgba(15, 137, 245, 1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+        }
+    }
+}
+
+@import "./poi-search-view.less";
