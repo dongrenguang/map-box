@@ -6,13 +6,12 @@ export default class PoiSearchView extends View
 {
     metadata = {
         properties: {
+            placeholder: { type: "string", defaultValue: "搜索" },
             selectedPoi: { type: "object", bindable: true },
-            tipPoi: { type: "object", bindable: true },
             poiSuggestions:{ type: "object" } // Array
         },
         events: {
-            input: { parameters: { keyword: "string" } },
-            search: { parameters: { keyword: "string" } }
+            input: { parameters: { keyword: "string" } }
         }
     };
 
@@ -31,7 +30,7 @@ export default class PoiSearchView extends View
 
     _initSearchInput()
     {
-        this.$searchInput = $(`<input type="search" placeholder="搜索" />`)
+        this.$searchInput = $(`<input type="search" placeholder=${this.getPlaceholder()} />`)
         this.$element.append(this.$searchInput);
 
         let inputTimeout = null;
@@ -51,13 +50,16 @@ export default class PoiSearchView extends View
 
     _initPoiSuggestionListView()
     {
+        const $suggestionList = $(`<div class="mb-suggestion-list-wrapper" />`);
+        this.$container.append($suggestionList);
         this.poiSuggestionListView = new PoiSuggestionListView("poi-suggestion-list-view");
-        this.addSubview(this.poiSuggestionListView);
+        this.addSubview(this.poiSuggestionListView, $suggestionList);
     }
 
     setSelectedPoi(selectedPoi)
     {
         this.setProperty("selectedPoi", selectedPoi);
+        this.setPoiSuggestions([]);
         if (selectedPoi && selectedPoi.name)
         {
             this.$searchInput.val(selectedPoi.name);
@@ -65,15 +67,6 @@ export default class PoiSearchView extends View
         else
         {
             this.$searchInput.val("");
-        }
-    }
-
-    setTipPoi(tipPoi)
-    {
-        this.setProperty("tipPoi", tipPoi);
-        if (tipPoi && tipPoi.name)
-        {
-            this.$searchInput.val(tipPoi.name);
         }
     }
 
@@ -96,10 +89,5 @@ export default class PoiSearchView extends View
             // Enter key
             this._onsearch(this.$searchInput.val());
         }
-    }
-
-    _onsearch(keyword)
-    {
-        this.fireSearch({ keyword });
     }
 }

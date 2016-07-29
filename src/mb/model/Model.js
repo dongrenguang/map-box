@@ -6,7 +6,15 @@ export default class Model extends JSONModel
     {
         super({
             selectedPoi: null,
-            tipPoi: null
+            originPoi: null,
+            destinationPoi: null
         });
+    }
+
+    forceSetProperty(sPath, oValue, oContent, bAsyncUpdate)
+    {
+        const result = this.setProperty(sPath, oValue, oContent, bAsyncUpdate);
+        this.checkUpdate(true, false);
+        return result;
     }
 }
