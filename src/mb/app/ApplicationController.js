@@ -3,7 +3,7 @@ import AdaptiveApplicationController from "sap/a/app/ApplicationController";
 import Application from "./Application";
 import MapViewController from "../map/MapViewController";
 import Model from "../model/Model";
-import PoiSearchViewController from "../view/PoiSearchViewController";
+import ODSearchViewController from "../view/ODSearchViewController";
 
 export default class ApplicationController extends AdaptiveApplicationController
 {
@@ -12,7 +12,7 @@ export default class ApplicationController extends AdaptiveApplicationController
         super.afterInit();
         this._initModel();
         this._initMapViewController();
-        this._initPoiSearchViewController();
+        this._initODSearchViewController();
     }
 
     _initModel()
@@ -33,11 +33,10 @@ export default class ApplicationController extends AdaptiveApplicationController
         this.mapView = this.mapViewController.view;
     }
 
-    _initPoiSearchViewController()
+    _initODSearchViewController()
     {
-        this.poiSearchViewController = new PoiSearchViewController();
-        this.addChildViewController(this.poiSearchViewController);
-        this.poiSearchView = this.poiSearchViewController.view;
+        this.odSearchViewController = new ODSearchViewController();
+        this.addChildViewController(this.odSearchViewController);
     }
 
     createView(options)

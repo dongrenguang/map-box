@@ -5,9 +5,21 @@ import ServiceClient from "../../gaode/service/ServiceClient";
 
 export default class PoiSearchViewController extends ViewController
 {
+    metadata = {
+        events: {
+            select: { parameters: { selectedPoi: "object" } }
+        }
+    };
+
     afterInit()
     {
         super.afterInit();
+        this.view.attachInput(this._poiSearchView_oninput.bind(this));
+
+        this.poiSuggestionListView = this.view.poiSuggestionListView;
+        this.poiSuggestionListView.attachSelectedPoiChanged((e) => {
+            this.fireSelect({ selectedPoi: e.getParameter("selectedPoi") });
+        });
     }
 
     createView(options)
@@ -16,17 +28,7 @@ export default class PoiSearchViewController extends ViewController
             selectedPoi: "{/selectedPoi}",
             tipPoi: "{/tipPoi}"
         }, options);
-        return new PoiSearchView("poi-search-view", opt);
-    }
-
-    initView()
-    {
-        super.initView();
-        this.view.attachInput(this._poiSearchView_oninput.bind(this));
-        this.view.attachSearch(this._poiSearchView_onsearch.bind(this));
-
-        this.poiSuggestionListView = this.view.poiSuggestionListView;
-        this.poiSuggestionListView.attachSelectedPoiChanged(this._poiSuggestionListView_onselectedpoichanged.bind(this));
+        return new PoiSearchView(opt);
     }
 
 
@@ -45,20 +47,5 @@ export default class PoiSearchViewController extends ViewController
                 this.view.setPoiSuggestions(tips);
             });
         }
-    }
-
-    _poiSearchView_onsearch(e)
-    {
-        const keyword = e.getParameter("keyword");
-        ServiceClient.getInstance().searchPoiAutocomplete(keyword).then(tips => {
-            const topPoi = { name: tips[0].name, location: tips[0].location };
-            this.getModel().forceSetProperty("/selectedPoi", topPoi);
-        }, error => console.error(error));
-    }
-
-    _poiSuggestionListView_onselectedpoichanged(e)
-    {
-        const selectedPoi = e.getParameter("selectedPoi");
-        this.getModel().forceSetProperty("/selectedPoi", selectedPoi);
     }
 }

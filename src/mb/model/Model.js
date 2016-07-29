@@ -6,7 +6,8 @@ export default class Model extends JSONModel
     {
         super({
             selectedPoi: null,
-            tipPoi: null
+            originPoi: null,
+            destinationPoi: null
         });
     }
 

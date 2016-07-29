@@ -9,10 +9,11 @@ export default class MapView extends AdaptiveMapView
     metadata = {
         properties: {
             selectedPoi: { type: "object", bindable: true },
-            tipPoi: { type: "object", bindable: true }
+            originPoi: { type: "object", bindable: true },
+            destinationPoi: {type: "object", bindable: true }
         },
         events: {
-            click: { parameters: { location: "object" } }
+            searchRoute: { parameters: { originPoi: "object", destinationPoi: "object" } }
         }
     };
 
@@ -20,7 +21,6 @@ export default class MapView extends AdaptiveMapView
     {
         super.afterInit();
         this.addStyleClass("mb-map-view");
-        this.map.on("click", this._onclick.bind(this));
     }
 
     initLayers()
@@ -43,25 +43,41 @@ export default class MapView extends AdaptiveMapView
         if (selectedPoi && selectedPoi.location && !isNaN(selectedPoi.location[0]) && !isNaN(selectedPoi.location[1]))
         {
             this.setCenterLocation(selectedPoi.location, 16);
-            this.updateSelectedPoiMarker();
+            this._updateSelectedPoiMarker();
         }
     }
 
-    setTipPoi(tipPoi)
+    setOriginPoi(originPoi)
     {
-        this.setProperty("tipPoi", tipPoi);
+        this.setProperty("originPoi", originPoi);
+        const destinationPoi = this.getDestinationPoi();
+        if (originPoi && destinationPoi)
+        {
+            this.fireSearchRoute({
+                originPoi,
+                destinationPoi
+            });
+        }
     }
 
-    updateSelectedPoiMarker()
+    setDestinationPoi(destinationPoi)
+    {
+        this.setProperty("destinationPoi", destinationPoi);
+        const originPoi = this.getOriginPoi();
+        if (originPoi && destinationPoi)
+        {
+            this.fireSearchRoute({
+                originPoi,
+                destinationPoi
+            });
+        }
+    }
+
+
+
+
+    _updateSelectedPoiMarker()
     {
         this.selectionPoiLayer.updateSelectedPoiMarker(this.getSelectedPoi().location);
-    }
-
-
-
-
-    _onclick(e)
-    {
-        this.fireClick({ location: e.latlng });
     }
 }

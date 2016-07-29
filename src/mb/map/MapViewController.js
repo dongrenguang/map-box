@@ -9,27 +9,21 @@ export default class MapViewController extends ViewController
     afterInit()
     {
         super.afterInit();
+        this.naviLayer = this.view.naviLayer;
+        this.view.attachSearchRoute(this._onsearchroute.bind(this));
     }
 
     createView(options)
     {
-        const opt = $.extend({
-            selectedPoi: "{/selectedPoi}",
-            tipPoi: "{/tipPoi}"
+        const opts = $.extend({
+            originPoi: "{/originPoi}",
+            destinationPoi: "{/destinationPoi}"
         }, options);
-        return new MapView("map-view", opt);
-    }
-
-    initView()
-    {
-        super.initView();
-        this.view.attachClick(this._mapView_onclick.bind(this));
-        this.naviLayer = this.view.naviLayer; // TODO delete
+        return new MapView("map-view", opts);
     }
 
     searchRoute(startLocation, endLocation)
     {
-        // TODO
         this.naviLayer.applySettings({
             startLocation,
             endLocation
@@ -45,12 +39,12 @@ export default class MapViewController extends ViewController
 
 
 
-    _mapView_onclick(e)
+    _onsearchroute(e)
     {
-        const location = e.getParameter("location");
-        ServiceClient.getInstance().searchGeocoder(location).then(result => {
-            const name = result.formattedAddress;
-            this.getModel().forceSetProperty("/tipPoi", { name, location });
-        }, error => console.error(error));
+        const originPoi = e.getParameter("originPoi");
+        const destinationPoi = e.getParameter("destinationPoi");
+        const startLocation = originPoi.location;
+        const endLocation = destinationPoi.location;
+        this.searchRoute(startLocation, endLocation);
     }
 }
