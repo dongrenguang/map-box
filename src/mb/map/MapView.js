@@ -40,7 +40,7 @@ export default class MapView extends AdaptiveMapView
     setSelectedPoi(selectedPoi)
     {
         this.setProperty("selectedPoi", selectedPoi);
-        if (selectedPoi)
+        if (selectedPoi && selectedPoi.location && !isNaN(selectedPoi.location[0]) && !isNaN(selectedPoi.location[1]))
         {
             this.updateSelectedPoiMarker();
             this.setCenterLocation(selectedPoi.location, 16);

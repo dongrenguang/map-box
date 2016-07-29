@@ -1,11 +1,14 @@
 import View from "sap/a/view/View";
 
+import PoiSuggestionListView from "./PoiSuggestionListView";
+
 export default class PoiSearchView extends View
 {
     metadata = {
         properties: {
             selectedPoi: { type: "object", bindable: true },
             tipPoi: { type: "object", bindable: true },
+            poiSuggestions:{ type: "object" } // Array
         },
         events: {
             input: { parameters: { keyword: "string" } },
@@ -23,6 +26,7 @@ export default class PoiSearchView extends View
     _initLayout()
     {
         this._initSearchInput();
+        this._initPoiSuggestionListView();
     }
 
     _initSearchInput()
@@ -45,6 +49,12 @@ export default class PoiSearchView extends View
         this.$searchInput.on("keydown", this._onkeydown.bind(this))
     }
 
+    _initPoiSuggestionListView()
+    {
+        this.poiSuggestionListView = new PoiSuggestionListView("poi-suggestion-list-view");
+        this.addSubview(this.poiSuggestionListView);
+    }
+
     setSelectedPoi(selectedPoi)
     {
         this.setProperty("selectedPoi", selectedPoi);
@@ -64,6 +74,15 @@ export default class PoiSearchView extends View
         if (tipPoi && tipPoi.name)
         {
             this.$searchInput.val(tipPoi.name);
+        }
+    }
+
+    setPoiSuggestions(poiSuggestions)
+    {
+        this.setProperty("poiSuggestions", poiSuggestions);
+        if (this.poiSuggestionListView)
+        {
+            this.poiSuggestionListView.setItems(poiSuggestions);
         }
     }
 
